@@ -1,0 +1,61 @@
+//- MIXINS IS REUSING UI ELEMENTS ACROSS WHOLE SITE , IT GIVES US THE COMPONENT WE WANT
+
+mixin createPostForm(userLoggedIn)
+    .postFormContainer
+        .userImageContainer
+            img(src=userLoggedIn.profilePic, alt="User's Profile picture")
+        .textareaContainer 
+            textarea#postTextarea(placeholder="What's happening?")
+            .buttonsContainer   
+                button#submitPostButton(disabled="") Post
+
+mixin createReplyModal(userLoggedIn)
+   #replyModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='replyModalLabel' aria-hidden='true')
+        .modal-dialog(role='document')
+            .modal-content
+                .modal-header
+                    h5#replyModal.modal-title Reply
+                    button.close(type='button' data-bs-dismiss='modal' aria-label='Close')
+                        span x
+                .modal-body
+                    #originalPostContainer
+                    .postFormContainer
+                        .userImageContainer
+                             img(src=userLoggedIn.profilePic, alt="User's Profile picture")
+                        .textareaContainer 
+                            textarea#replyTextarea(placeholder="What's happening?")
+                .modal-footer
+                    button.btn.btn-secondary(type='button' data-bs-dismiss='modal') Close
+                    button#submitReplyButton.btn.btn-primary(type='button',disabled="") Reply
+
+
+mixin createDeletePostModal()
+   #deletePostModal.modal.fade(tabindex='-1' role='dialog' aria-labelledby='deletePostModalLabel' aria-hidden='true')
+        .modal-dialog(role='document')
+            .modal-content
+                .modal-header
+                    h5#deletePostModal.modal-title Delete Tweet
+                    button.close(type='button' data-bs-dismiss='modal' aria-label='Close')
+                        span x
+                .modal-body
+                    p Are you sure you want to delete this tweet ?
+                .modal-footer
+                    button.btn.btn-secondary(type='button' data-bs-dismiss='modal') Close
+                    button#deletePostButton.btn.btn-primary(type='button') Delete
+
+
+mixin createPostModal(userLoggedIn)
+    +createReplyModal(userLoggedIn)
+    +createDeletePostModal()
+
+//-  -text to create a variable name text  
+//-   to render a variable which is not a part of pug, use #{variableName}
+mixin createFollowButton(user , isFollowing)
+    - text = isFollowing ? "Following" : "Follow"
+    - buttonClass = isFollowing ? "followButton following" : "followButton"
+    button(class=buttonClass , data-user=user._id) #{text}
+
+mixin createTab(name , href , isSelected)
+    - className = isSelected ? "tab active" : "tab"
+    a(href=href , class=className) 
+        span #{name}
